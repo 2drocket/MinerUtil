@@ -97,10 +97,7 @@ function opener()
     spawn(function()
         while autoCrate == true do
             local args = {
-                [1] = "Inferno",
-                [2] = "Unreal",
-                [3] = "Regular",
-                [4] = "Easter"
+                [1] = "Inferno"
             }
             ReplicatedStorage.MysteryBox:InvokeServer(unpack(args))
         end
@@ -111,10 +108,11 @@ function crate()
     spawn(function()
         while crateTpToggle == true do
             for i, v in pairs(bxs:GetChildren()) do
-                v.CFrame = char.HumanoidRootPart.CFrame+Vector3.new(math.random(0,0),0,math.random(0,0))
-                wait(1)
+                char.HumanoidRootPart.CFrame = v.CFrame+Vector3.new(math.random(0,0),0,math.random(0,0))
+                wait(0.8)
                  if crateTpToggle == false then break end
             end
+            wait()
         end
     end)
 end
@@ -156,7 +154,7 @@ end)
 
 -- Tab 2
 
-local selectedLocation = "Factory1"
+local selectedLocation;
 
 tab2:Dropdown("Select a base via drop down menu",{"Factory1","Factory2","Factory3","Factory4","Factory5","Factory6"},function(value)
     selectedLocation = value;
