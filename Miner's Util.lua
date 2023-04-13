@@ -1,15 +1,14 @@
--- Variables
-
-local player = game.Players.LocalPlayer
-local mouse = player:GetMouse()
+-- Paths
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
 local Workspace = game:GetService("Workspace")
+local player = game.Players.LocalPlayer
+local mouse = player:GetMouse()
+local char = player.Character -- must be lowercase
+local bxs = Workspace.Boxes
 
-local Player = game:GetService("Players").LocalPlayer
-local Boxes = game:GetService("Workspace").Boxes
-local Character = Player.Character
+-- Global Variables
 
 getgenv().autoBuy = false;   
 getgenv().autoCrate = false; 
@@ -17,13 +16,13 @@ getgenv().crateTpToggle = false;
 
 -- Settings
 
-rebirth = "t" -- has to be lowercase
+rebirth = "t" -- keybind functions have to be lowercase
 lay1 = "y"
 lay2 = "u"
 withdraw = "k"
 quasar = "j"
 
--- Keybinds
+-- Keybind functions
 
 mouse.KeyDown:connect(function(key) 
     if key == rebirth then
@@ -76,14 +75,15 @@ function purchaser()
                 [1] = "Basic Iron Mine",    
                 [2] = 99
             }
-            ReplicatedStorage.BuyItem:InvokeServer(unpack(args))
+            remotePath.BuyItem:InvokeServer(unpack(args))
         end  
-    )
+    end)
 end
 
 function teleportTo(placeCFrame)
-    if Character then
-        Character.HumanoidRootPart.CFrame = placeCFrame;
+    local plyr = game.Players.LocalPlayer;
+    if plyr.Character then
+        plyr.Character.HumanoidRootPart.CFrame = placeCFrame;
     end
 end
 
@@ -98,11 +98,13 @@ function opener()
         while autoCrate == true do
             local args = {
                 [1] = "Inferno",
-                --[2] = 
+                [2] = "Unreal",
+                [3] = "Regular",
+                [4] = "Easter"
             }
             ReplicatedStorage.MysteryBox:InvokeServer(unpack(args))
         end
-    )
+    end)
 end
 
 function crate()
@@ -113,13 +115,17 @@ function crate()
                 wait(1.5)
             end
         end
-    )
+        if crateTpToggle == false then 
+            teleportLocation(selectedLocation) 
+        end
+    end)
 end
+
 -- GUI
 
 local Flux = loadstring(game:HttpGet"https://raw.githubusercontent.com/dawid-scripts/UI-Libs/main/fluxlib.txt")()
 
-local win = Flux:Window("Miner's Util", Color3.fromRGB(255, 110, 48), Enum.KeyCode.RightControl)
+local win = Flux:Window("Miner's Util", "By Astralzx", Color3.fromRGB(255, 110, 48), Enum.KeyCode.RightControl)
 local tab1 = win:Tab("Farming", "http://www.roblox.com/asset/?id=6023426915")
 local tab2 = win:Tab("Teleports", "http://www.roblox.com/asset/?id=6023426915")
 
@@ -133,7 +139,7 @@ tab1:Toggle("Auto bazingium", "Automatically purchases 99x iron mines", false, f
     end
 end)
 
-tab1:Toggle("Auto crate", "Automatically opens crates", false, function(bool)
+tab1:Toggle("Auto Box Opener", "Automatically opens Inferno, Regular and Unreal boxes", false, function(bool)
     getgenv().autoCrate = bool
     print('Auto buy is: ', bool);
     if bool then
@@ -141,11 +147,11 @@ tab1:Toggle("Auto crate", "Automatically opens crates", false, function(bool)
     end
 end)
 
-tab1:Toggle("Crate farm", "Automatically teleport to crates across the map", false, function(bool)
+tab1:Toggle("Crate TP", "Automatically teleport to crates across the map", false, function(bool)
     gengenv().crateTpToggle = bool
     print('CrateTP is: ', bool);
     if bool then
-        crate();
+        crateTpToggle();
     end
 end)
 
@@ -153,7 +159,7 @@ end)
 
 local selectedLocation;
 
-tab2:Dropdown("Factory",{"Factory1","Factory2","Factory3","Factory4","Factory5","Factory6"},function(value)
+tab2:Dropdown("Select a base via drop down menu",{"Factory1","Factory2","Factory3","Factory4","Factory5","Factory6"},function(value)
     selectedLocation = value;
     print(value)
 end)
