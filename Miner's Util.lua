@@ -76,6 +76,7 @@ function purchaser()
                 [2] = 99
             }
             remotePath.BuyItem:InvokeServer(unpack(args))
+            wait()
         end  
     end)
 end
@@ -103,6 +104,7 @@ function opener()
                 [4] = "Easter"
             }
             ReplicatedStorage.MysteryBox:InvokeServer(unpack(args))
+            wait()
         end
     end)
 end
@@ -114,9 +116,7 @@ function crate()
                 char:MoveTo(v.Position)
                 wait(1.5)
             end
-        end
-        if crateTpToggle == false then 
-            teleportLocation(selectedLocation) 
+            wait()
         end
     end)
 end
@@ -125,9 +125,10 @@ end
 
 local Flux = loadstring(game:HttpGet"https://raw.githubusercontent.com/dawid-scripts/UI-Libs/main/fluxlib.txt")()
 
-local win = Flux:Window("Miner's Util", "By Astralzx", Color3.fromRGB(255, 110, 48), Enum.KeyCode.RightControl)
+local win = Flux:Window("Miner's Haven Util", Color3.fromRGB(255, 110, 48), Enum.KeyCode.RightControl)
 local tab1 = win:Tab("Farming", "http://www.roblox.com/asset/?id=6023426915")
 local tab2 = win:Tab("Teleports", "http://www.roblox.com/asset/?id=6023426915")
+local tab2 = win:Tab("Settings", "http://www.roblox.com/asset/?id=6023426915")
 
 -- Tab 1
 
@@ -148,10 +149,10 @@ tab1:Toggle("Auto Box Opener", "Automatically opens Inferno, Regular and Unreal 
 end)
 
 tab1:Toggle("Crate TP", "Automatically teleport to crates across the map", false, function(bool)
-    gengenv().crateTpToggle = bool
+    getgenv().crateTpToggle = bool
     print('CrateTP is: ', bool);
     if bool then
-        crateTpToggle();
+        crate();
     end
 end)
 
@@ -169,3 +170,7 @@ tab2:Button("Teleport", "Teleport to a selected location decided by the drop dow
         teleportLocation(selectedLocation)
     end
 end)
+
+-- Tab 3
+
+tab3:Label("In development")
