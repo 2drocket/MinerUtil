@@ -113,7 +113,7 @@ function crate()
             for i, v in pairs(bxs:GetChildren()) do
                 char:MoveTo(v.Position)
                 wait(1.5)
-                 if crateTpToggle == false then break end
+                 if crateTpToggle == false then teleportLocation(selectedLocation) break end
             end
         end
     end)
