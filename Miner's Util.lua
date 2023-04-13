@@ -111,8 +111,8 @@ function crate()
     spawn(function()
         while crateTpToggle == true do
             for i, v in pairs(bxs:GetChildren()) do
-                char:MoveTo(v.Position)
-                wait(1.5)
+                v.CFrame = char.HumanoidRootPart.CFrame+Vector3.new(math.random(0,0),0,math.random(0,0))
+                wait(1)
                  if crateTpToggle == false then break end
             end
         end
@@ -156,7 +156,7 @@ end)
 
 -- Tab 2
 
-local selectedLocation = "Factory1";
+local selectedLocation = "Factory1"
 
 tab2:Dropdown("Select a base via drop down menu",{"Factory1","Factory2","Factory3","Factory4","Factory5","Factory6"},function(value)
     selectedLocation = value;
