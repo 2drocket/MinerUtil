@@ -113,7 +113,7 @@ function crate()
             for i, v in pairs(bxs:GetChildren()) do
                 char:MoveTo(v.Position)
                 wait(1.5)
-                 if crateTpToggle == false then teleportLocation(selectedLocation) break end
+                 if crateTpToggle == false then break end
             end
         end
     end)
@@ -123,7 +123,7 @@ end
 
 local Flux = loadstring(game:HttpGet"https://raw.githubusercontent.com/dawid-scripts/UI-Libs/main/fluxlib.txt")()
 
-local win = Flux:Window("Miner's Util", Color3.fromRGB(255, 110, 48), Enum.KeyCode.RightControl)
+local win = Flux:Window("Miner's Util", "By Astralzx", Color3.fromRGB(255, 110, 48), Enum.KeyCode.RightControl)
 local tab1 = win:Tab("Farming", "http://www.roblox.com/asset/?id=6023426915")
 local tab2 = win:Tab("Teleports", "http://www.roblox.com/asset/?id=6023426915")
 local tab3 = win:Tab("Settings", "http://www.roblox.com/asset/?id=6023426915")
@@ -156,7 +156,7 @@ end)
 
 -- Tab 2
 
-local selectedLocation;
+local selectedLocation = "Factory1";
 
 tab2:Dropdown("Select a base via drop down menu",{"Factory1","Factory2","Factory3","Factory4","Factory5","Factory6"},function(value)
     selectedLocation = value;
