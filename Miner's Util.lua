@@ -123,7 +123,7 @@ end
 
 local Flux = loadstring(game:HttpGet"https://raw.githubusercontent.com/dawid-scripts/UI-Libs/main/fluxlib.txt")()
 
-local win = Flux:Window("Miner's Util", "By Astralzx", Color3.fromRGB(255, 110, 48), Enum.KeyCode.RightControl)
+local win = Flux:Window("Miner's Util", Color3.fromRGB(255, 110, 48), Enum.KeyCode.RightControl)
 local tab1 = win:Tab("Farming", "http://www.roblox.com/asset/?id=6023426915")
 local tab2 = win:Tab("Teleports", "http://www.roblox.com/asset/?id=6023426915")
 local tab3 = win:Tab("Settings", "http://www.roblox.com/asset/?id=6023426915")
