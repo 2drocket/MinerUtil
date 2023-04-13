@@ -7,7 +7,13 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
 local Workspace = game:GetService("Workspace")
 
+local Player = game:GetService("Players").LocalPlayer
+local Boxes = game:GetService("Workspace").Boxes
+local Character = Player.Character
+
 getgenv().autoBuy = false;   
+getgenv().autoCrate = false; 
+getgenv().crateTpToggle = false;
 
 -- Settings
 
@@ -70,15 +76,14 @@ function purchaser()
                 [1] = "Basic Iron Mine",    
                 [2] = 99
             }
-            remotePath.BuyItem:InvokeServer(unpack(args))
+            ReplicatedStorage.BuyItem:InvokeServer(unpack(args))
         end  
-    end)
+    )
 end
 
 function teleportTo(placeCFrame)
-    local plyr = game.Players.LocalPlayer;
-    if plyr.Character then
-        plyr.Character.HumanoidRootPart.CFrame = placeCFrame;
+    if Character then
+        Character.HumanoidRootPart.CFrame = placeCFrame;
     end
 end
 
@@ -88,11 +93,33 @@ function teleportLocation(location)
     end
 end
 
+function opener()
+    spawn(function()
+        while autoCrate == true do
+            local args = {
+                [1] = "Inferno",
+                --[2] = 
+            }
+            ReplicatedStorage.MysteryBox:InvokeServer(unpack(args))
+        end
+    )
+end
+
+function crate()
+    spawn(function()
+        while crateTpToggle == true do
+            for i, v in pairs(bxs:GetChildren()) do
+                char:MoveTo(v.Position)
+                wait(1.5)
+            end
+        end
+    )
+end
 -- GUI
 
 local Flux = loadstring(game:HttpGet"https://raw.githubusercontent.com/dawid-scripts/UI-Libs/main/fluxlib.txt")()
 
-local win = Flux:Window("Miner's Util", "By Astralzx", Color3.fromRGB(255, 110, 48), Enum.KeyCode.RightControl)
+local win = Flux:Window("Miner's Util", Color3.fromRGB(255, 110, 48), Enum.KeyCode.RightControl)
 local tab1 = win:Tab("Farming", "http://www.roblox.com/asset/?id=6023426915")
 local tab2 = win:Tab("Teleports", "http://www.roblox.com/asset/?id=6023426915")
 
@@ -106,7 +133,21 @@ tab1:Toggle("Auto bazingium", "Automatically purchases 99x iron mines", false, f
     end
 end)
 
-tab1:Toggle("Crate farm", "Automatically teleport to crates across the map")
+tab1:Toggle("Auto crate", "Automatically opens crates", false, function(bool)
+    getgenv().autoCrate = bool
+    print('Auto buy is: ', bool);
+    if bool then
+        opener();
+    end
+end)
+
+tab1:Toggle("Crate farm", "Automatically teleport to crates across the map", false, function(bool)
+    gengenv().crateTpToggle = bool
+    print('CrateTP is: ', bool);
+    if bool then
+        crate();
+    end
+end)
 
 -- Tab 2
 
