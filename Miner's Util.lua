@@ -16,56 +16,51 @@ getgenv().crateTpToggle = false;
 
 -- Settings
 
-rebirth = "t" -- keybind functions have to be lowercase
-lay1 = "y"
-lay2 = "u"
-withdraw = "k"
-quasar = "j"
-
 -- Keybind functions
 
-mouse.KeyDown:connect(function(key) 
-    if key == rebirth then
+if getgenv().Bind then
+    getgenv().Bind:Disconnect()
+end
+getgenv().Bind = UserInputService.InputBegan:Connect(function(Input, IsTyping)
+    if IsTyping then return end
+    if Input.KeyCode == Enum.KeyCode.V then -- Rebirth keybind
         local args = {
             [1] = 26
         }
         ReplicatedStorage.Rebirth:InvokeServer(unpack(args))
     end
-end)
-
-mouse.KeyDown:connect(function(key2)
-    if key2 == lay1 then
+    if Input.KeyCode == Enum.KeyCode.B then -- Load Layout 1 keybind
         local args = {
             [1] = "Load",
             [2] = "Layout1"
         }
         ReplicatedStorage.Layouts:InvokeServer(unpack(args))
     end
-end)
-
-mouse.KeyDown:connect(function(key3)
-    if key3 == lay2 then
+    if Input.KeyCode == Enum.KeyCode.N then -- Load Layout 2 Keybind
         local args = {
             [1] = "Load",
             [2] = "Layout2"
         }
         ReplicatedStorage.Layouts:InvokeServer(unpack(args))
     end
-end)
-
-mouse.KeyDown:connect(function(key4)
-    if key4 == withdraw then
+    if Input.KeyCode == Enum.KeyCode.M then -- Load Layout 3 Keybind
+        local args = {
+            [1] = "Load",
+            [2] = "Layout3"
+        }
+        ReplicatedStorage.Layouts:InvokeServer(unpack(args))
+    end
+    if Input.KeyCode == Enum.KeyCode.K then -- Withdraw All Keybind
         ReplicatedStorage.DestroyAll:InvokeServer()
     end
-end)
-
-
-mouse.KeyDown:connect(function(key5)
-    if key5 == quasar then
+    if Input.KeyCode == Enum.KeyCode.J then -- Pulsar Keybind
         ReplicatedStorage.Pulse:FireServer()
     end
-end)
-
+    if Input.KeyCode == Enum.KeyCode.G then
+        teleportLocation('Factory1')
+    end
+  end)
+  
 -- Scripts
 
 function purchaser()
@@ -75,7 +70,7 @@ function purchaser()
                 [1] = "Basic Iron Mine",    
                 [2] = 99
             }
-            remotePath.BuyItem:InvokeServer(unpack(args))
+            ReplicatedStorage.BuyItem:InvokeServer(unpack(args))
         end  
     end)
 end
