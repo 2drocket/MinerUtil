@@ -12,6 +12,10 @@ FluxLib.Name = "FluxLib"
 FluxLib.Parent = game.CoreGui
 FluxLib.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
+--EDIT--
+_G.KeybindClickDetected;
+--EDIT--
+
 coroutine.wrap(
 	function()
 		while wait() do
@@ -2888,6 +2892,7 @@ function Flux:Window(text, bottom,mainclr)
 					if inputwait.KeyCode.Name ~= "Unknown" then
 						BindLabel.Text = inputwait .KeyCode.Name
 						Key = inputwait .KeyCode.Name
+						_G.KeybindClickDetected = true
 						isKeyLeft = false
 					end
 					game:GetService("UserInputService").InputEnded:wait()
