@@ -13,7 +13,7 @@ FluxLib.Parent = game.CoreGui
 FluxLib.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 --EDIT--
-_G.KeybindClickDetected;
+_G.KeybindClickDetected = false;
 --EDIT--
 
 coroutine.wrap(
