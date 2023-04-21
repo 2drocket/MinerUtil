@@ -14,52 +14,48 @@ getgenv().autoBuy = false;
 getgenv().autoCrate = false; 
 getgenv().crateTpToggle = false;
 
+
 -- Settings
 
--- Keybind functions
+settingsTable = {
+    rebirthKeyBind = 'V',
+    loadLay1KeyBind = 'B',
+    loadLay2KeyBind = 'N',
+    loadLay3KeyBind = 'M',
+    withdrawKeyBind = 'K',
+    pulseKeyBind = 'J',
+    teleportKeyBind = 'G'
 
-if getgenv().Bind then
-    getgenv().Bind:Disconnect()
+}
+
+print("---DEFAULT SETTINGS---")
+for i,v in pairs(settingsTable) do
+    print(i,v)
 end
-getgenv().Bind = UserInputService.InputBegan:Connect(function(Input, IsTyping)
-    if IsTyping then return end
-    if Input.KeyCode == Enum.KeyCode.V then -- Rebirth keybind
-        local args = {
-            [1] = 26
-        }
-        ReplicatedStorage.Rebirth:InvokeServer(unpack(args))
+print("-------")
+
+function loadSettings()
+    print("Loading settings")
+    if(readfile and isfile and isfile(filename)) then
+        settingsTable = HttpService:JSONEncode(readfile(filename));
+        print("Settings loaded")
+        print("New settings are")
+        for i,v in pairs(settingsTable) do
+            print(i,v)
+        end
     end
-    if Input.KeyCode == Enum.KeyCode.B then -- Load Layout 1 keybind
-        local args = {
-            [1] = "Load",
-            [2] = "Layout1"
-        }
-        ReplicatedStorage.Layouts:InvokeServer(unpack(args))
+end
+
+function saveSettings()
+    print("Saving current settings")
+    local json;
+    if (writefile) then
+        json = HttpService:JSONEncode(settingsTable);
+        writefile(filename, json);
+    else
+        print("Settings can not be saved due to your executor")
     end
-    if Input.KeyCode == Enum.KeyCode.N then -- Load Layout 2 Keybind
-        local args = {
-            [1] = "Load",
-            [2] = "Layout2"
-        }
-        ReplicatedStorage.Layouts:InvokeServer(unpack(args))
-    end
-    if Input.KeyCode == Enum.KeyCode.M then -- Load Layout 3 Keybind
-        local args = {
-            [1] = "Load",
-            [2] = "Layout3"
-        }
-        ReplicatedStorage.Layouts:InvokeServer(unpack(args))
-    end
-    if Input.KeyCode == Enum.KeyCode.K then -- Withdraw All Keybind
-        ReplicatedStorage.DestroyAll:InvokeServer()
-    end
-    if Input.KeyCode == Enum.KeyCode.J then -- Pulsar Keybind
-        ReplicatedStorage.Pulse:FireServer()
-    end
-    if Input.KeyCode == Enum.KeyCode.G then
-        teleportLocation('Factory1')
-    end
-  end)
+end
   
 -- Scripts
 
@@ -75,14 +71,14 @@ function purchaser()
     end)
 end
 
-function teleportTo(placeCFrame)
+function teleportTo(placeCFrame) -- Teleports player to selected location
     local plyr = game.Players.LocalPlayer;
     if plyr.Character then
         plyr.Character.HumanoidRootPart.CFrame = placeCFrame;
     end
 end
 
-function teleportLocation(location)
+function teleportLocation(location) -- Finds selected location
     if game:GetService("Workspace").Tycoons:FindFirstChild(location) then
         teleportTo(game:GetService("Workspace").Tycoons[location].Base.CFrame)
     end
@@ -114,9 +110,17 @@ end
 
 -- GUI
 
-local Flux = loadstring(game:HttpGet"https://raw.githubusercontent.com/dawid-scripts/UI-Libs/main/fluxlib.txt")()
+if _G.hereiambabyhehe ~= true then
+    _G.hereiambabyhehe = true
+elseif _G.hereiambabyhehe == true then
+    local removethat = game.CoreGui:FindFirstChild("FluxLib") -- this bit of code is to use the fixed version of Flux Lib
+    removethat:Destroy()
+    removethat:Remove()
+end
 
-local win = Flux:Window("Miner's Util", "By Astralzx", Color3.fromRGB(255, 110, 48), Enum.KeyCode.RightControl)
+local Flux = loadstring(game:HttpGet"https://raw.githubusercontent.com/2drocket/MinerUtil/main/FluxLibTweaked.lua")()
+
+local win = Flux:Window("Miner's Util", Color3.fromRGB(255, 110, 48), Enum.KeyCode.RightControl)
 local tab1 = win:Tab("Farming", "http://www.roblox.com/asset/?id=6023426915")
 local tab2 = win:Tab("Teleports", "http://www.roblox.com/asset/?id=6023426915")
 local tab3 = win:Tab("Settings", "http://www.roblox.com/asset/?id=6023426915")
@@ -164,4 +168,55 @@ end)
 
 -- Tab 3
 
-tab3:Label("In development")
+tab3:Label("Keybinds")
+
+tab3:Bind("Rebirth", Enum.KeyCode[settingsTable.rebirthKeyBind], function() 
+    local args = {
+        [1] = 26
+    }
+    ReplicatedStorage.Rebirth:InvokeServer(unpack(args))
+    saveSettings()
+ end)
+
+ tab3:Bind("Load layout 1", Enum.KeyCode[settingsTable.loadLay1KeyBind], function() 
+    local args = {
+        [1] = "Load",
+        [2] = "Layout1"
+    }
+    ReplicatedStorage.Layouts:InvokeServer(unpack(args))
+    saveSettings()
+ end)
+
+ tab3:Bind("Load layout 2", Enum.KeyCode[settingsTable.loadLay2KeyBind], function() 
+    local args = {
+        [1] = "Load",
+        [2] = "Layout2"
+    }
+    ReplicatedStorage.Layouts:InvokeServer(unpack(args))
+    saveSettings()
+ end)
+
+tab3:Bind("Load layout 3", Enum.KeyCode[settingsTable.loadLay3KeyBind], function() 
+    local args = {
+        [1] = "Load",
+        [2] = "Layout3"
+    }
+    ReplicatedStorage.Layouts:InvokeServer(unpack(args))
+    saveSettings()
+ end)
+
+ tab3:Bind("Withdraw all", Enum.KeyCode[settingsTable.withdrawKeyBind], function() 
+    ReplicatedStorage.DestroyAll:InvokeServer()
+    saveSettings()
+ end)
+
+ tab3:Bind("Pulsar", Enum.KeyCode[settingsTable.pulseKeyBind], function() 
+    ReplicatedStorage.Pulse:FireServer()
+    saveSettings()
+ end)
+
+ tab3:Bind("Teleport to base 1", Enum.KeyCode[settingsTable.teleportKeyBind], function() 
+    teleportLocation('Factory1')
+    saveSettings()
+ end)
+    
